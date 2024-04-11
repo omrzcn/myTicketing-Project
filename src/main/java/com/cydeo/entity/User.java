@@ -1,13 +1,12 @@
 package com.cydeo.entity;
 
 import com.cydeo.enums.Gender;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 //@AllArgsConstructor - if we extends super class, we need to create constructor manually.
 public class User extends BaseEntity {
