@@ -155,12 +155,12 @@
 
                                             <tbody>
 
-                                            <tr>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
+                                            <tr th:each="userList : ${users}" th:value="${userList.userName}" >
+                                                <td th:text="${userList.firstName}"></td>
+                                                <td th:text="${userList.userName}"></td>
+                                                <td th:text="${userList.gender}"></td>
+                                                <td th:text="${userList.phone}"></td>
+                                                <td th:text="${userList.role.getDescription()}"></td>
                                                 <td class="actions">
                                                     <a href="#"><button type="button" class="btn btn-warning btn-sm">Update</button></a>
                                                     <a href="#" class="delete-row"><button type="button" class="btn btn-secondary btn-sm">Delete</button></a>
