@@ -32,7 +32,7 @@
                                 <div class="panel-body">
 
                                     <!-- ------------------------FORM START----------------------------- -->
-                                    <form action="#" th:object="${user}">
+                                    <form th:action="@{/user/create}" method="post" th:object="${user}">
                                         <div class="row">
                                             <div class="col-sm-6 col-md-6">
                                                 <div class="form-group">
@@ -86,10 +86,10 @@
                                                 <div class="form-group">
                                                     <label>Gender</label><br>
                                                     <label class="custom-control custom-radio custom-control-inline">
-                                                        <input type="radio" name="radio-inline" th:value="Male" th:field="*{gender}" class="custom-control-input" ><span class="custom-control-label">Male</span>
+                                                        <input type="radio" name="radio-inline" th:value="MALE" th:field="*{gender}" class="custom-control-input" ><span class="custom-control-label">Male</span>
                                                     </label>
                                                     <label class="custom-control custom-radio custom-control-inline">
-                                                        <input type="radio" name="radio-inline" th:value="Female" th:field="*{gender}" class="custom-control-input" ><span class="custom-control-label" >Female</span>
+                                                        <input type="radio" name="radio-inline" th:value="FEMALE" th:field="*{gender}" class="custom-control-input" ><span class="custom-control-label" >Female</span>
                                                     </label>
 
                                                 </div>
@@ -110,7 +110,7 @@
                                         <div class="row">
                                             <div class="col-sm-6 col-md-6 col-lg-12">
                                                 <div class="float-right">
-                                                    <button type="submit" class="btn btn-success">Save</button>
+                                                    <button type="submit" class="btn btn-success" >Save</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -156,9 +156,9 @@
                                             <tbody>
 
                                             <tr th:each="userList : ${users}" th:value="${userList.userName}" >
-                                                <td th:text="${userList.firstName}"></td>
+                                                <td th:text="${userList.firstName+' '+userList.lastName}"></td>
                                                 <td th:text="${userList.userName}"></td>
-                                                <td th:text="${userList.gender}"></td>
+                                                <td th:text="${userList.gender.value}"></td>
                                                 <td th:text="${userList.phone}"></td>
                                                 <td th:text="${userList.role.getDescription()}"></td>
                                                 <td class="actions">

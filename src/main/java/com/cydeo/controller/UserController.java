@@ -6,6 +6,8 @@ import com.cydeo.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -21,7 +23,7 @@ private final UserService userService;
 
     @GetMapping("/create")
     public String createUser(Model model){
-        model.addAttribute("user",new UserDTO());
+        model.addAttribute("user",new UserDTO()); // we need to provide empty page for UI. user will fill it.
      model.addAttribute("roles", roleService.findAll()); // we will get roles from database for "roles" for create.html line 104 with help of service package
         // we will create interface for role in service package
         model.addAttribute("users",userService.findAll());
@@ -31,5 +33,16 @@ private final UserService userService;
 
         return "user/create";
     }
+
+
+    @PostMapping("/create")
+    public String insertUser(@ModelAttribute("user")UserDTO userDTO){
+
+        userService.save(userDTO);
+
+
+        return "redirect:/user/create";
+    }
+
 
 }
