@@ -155,15 +155,15 @@
 
                                             <tbody>
 
-                                            <tr th:each="userList : ${users}" th:value="${userList.userName}" >
-                                                <td th:text="${userList.firstName+' '+userList.lastName}"></td>
-                                                <td th:text="${userList.userName}"></td>
-                                                <td th:text="${userList.gender.value}"></td>
-                                                <td th:text="${userList.phone}"></td>
-                                                <td th:text="${userList.role.getDescription()}"></td>
+                                            <tr th:each="user : ${users}"  >
+                                                <td th:text="${user.firstName+' '+user.lastName}"></td>
+                                                <td th:text="${user.userName}"></td>
+                                                <td th:text="${user.gender.value}"></td>
+                                                <td th:text="${user.phone}"></td>
+                                                <td th:text="${user.role.getDescription()}"></td>
                                                 <td class="actions">
-                                                    <a href="#"><button type="button" class="btn btn-warning btn-sm">Update</button></a>
-                                                    <a href="#" class="delete-row"><button type="button" class="btn btn-secondary btn-sm">Delete</button></a>
+                                                    <a th:href="@{/user/update/{id}(id=${user.userName})}"><button type="button" class="btn btn-warning btn-sm">Update</button></a>
+                                                    <a th:href="@{/user/delete/{id}(id=${user.userName})}" class="delete-row"><button type="button" class="btn btn-secondary btn-sm">Delete</button></a>
                                                 </td>
                                             </tr>
 
@@ -190,6 +190,12 @@
 
 <div th:replace="/fragments/javascript :: js"></div>
 
+
 </body>
 
 </html>
+
+
+
+
+
