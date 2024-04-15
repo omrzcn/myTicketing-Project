@@ -5,10 +5,7 @@ import com.cydeo.service.RoleService;
 import com.cydeo.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/user")
@@ -26,17 +23,17 @@ private final UserService userService;
         model.addAttribute("user",new UserDTO()); // we need to provide empty page for UI. user will fill it.
      model.addAttribute("roles", roleService.findAll()); // we will get roles from database for "roles" for create.html line 104 with help of service package
         // we will create interface for role in service package
-        model.addAttribute("users",userService.findAll());
+        model.addAttribute("users",userService.findAll()); // this is for userList on the page.
 
 
 
 
-        return "user/create";
+        return "/user/create";
     }
 
 
     @PostMapping("/create")
-    public String insertUser(@ModelAttribute("user")UserDTO userDTO){
+    public String insertUser(@ModelAttribute("user") UserDTO userDTO){
 
         userService.save(userDTO);
 
@@ -45,4 +42,43 @@ private final UserService userService;
     }
 
 
+    @GetMapping("/update/{username}")
+    public String editUser(@PathVariable("username") String username, Model model){
+
+        // finding user according to "id"
+        model.addAttribute("user",userService.findById(username));
+        // again bring all "roles"
+        model.addAttribute("roles",roleService.findAll());
+        // again bring all userlist
+        model.addAttribute("users",userService.findAll());
+
+        return "/user/update";
+    }
+
+    @PostMapping("/update")
+    public String updateUser(@ModelAttribute("user") UserDTO userDTO ){ // we provided UserDTO userDTO , thats why we dont have to provide @ModelAttribute("user"). Inteellij will understand
+
+        // we updated this user by @ModelAttribute
+        userService.update(userDTO);
+
+        return "redirect:/user/create";
+    }
+
+
+    @GetMapping("/delete/{username}")
+    public String deleteUser(@PathVariable("username") String username){
+
+        userService.deleteById(username);
+
+        return "redirect:/user/create";
+    }
+
+
 }
+
+
+
+
+
+
+
