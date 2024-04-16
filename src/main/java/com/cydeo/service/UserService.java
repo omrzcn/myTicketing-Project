@@ -7,6 +7,8 @@ import java.util.List;
 
 public interface UserService extends CrudService<UserDTO,String> { // we made string because we gonna search with usernama
 
+    List<UserDTO> findManager(); // this is for: when i on Project Create page, i want to see only managers on the Assigned Manager Dropdown. Not employess
 
+    // this is specific for users.
 
 }
