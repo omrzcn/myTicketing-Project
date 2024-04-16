@@ -24,7 +24,7 @@ public class ProjectController {
     public String createProject(Model model){
 
         model.addAttribute("project",new ProjectDTO());
-        model.addAttribute("managers",userService.findAll());
+        model.addAttribute("managers",userService.findManager());// this is coming from UserService. we created findManager to only see managers on the dropdown.
         model.addAttribute("projects",projectService.findAll());
         return "/project/create";
     }
@@ -43,6 +43,34 @@ public class ProjectController {
     public String deleteProject(@PathVariable("projectcode") String projectcode){
 
         projectService.deleteById(projectcode);
+
+        return "redirect:/project/create";
+    }
+
+    @GetMapping("/complete/{projectCode}") // we created this to get complete.
+    public String completeProject(@PathVariable("projectCode") String projectCode){
+
+        projectService.complete(projectService.findById(projectCode));
+
+        return "redirect:/project/create";
+    }
+
+
+    @GetMapping("/update/{projectCode}")
+    public String editProject(@PathVariable("projectCode") String projectCode,Model model){
+        model.addAttribute("project",projectService.findById(projectCode));
+        model.addAttribute("managers",userService.findManager());
+        model.addAttribute("projects",projectService.findAll());
+
+
+
+        return "/project/update";
+    }
+
+    @PostMapping("/update")
+    public String updateProject(@ModelAttribute("project") ProjectDTO project){
+
+        projectService.save(project);
 
         return "redirect:/project/create";
     }
