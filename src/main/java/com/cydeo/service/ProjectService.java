@@ -6,6 +6,7 @@ import org.yaml.snakeyaml.events.Event;
 
 public interface ProjectService extends CrudService<ProjectDTO,String> {
 
+    void complete(ProjectDTO project); // this is for complete status
 
 
 }
