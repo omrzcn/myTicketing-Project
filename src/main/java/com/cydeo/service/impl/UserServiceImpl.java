@@ -51,4 +51,9 @@ public class UserServiceImpl extends AbstractMapService<UserDTO,String> implemen
 
         // 2 is coming from here   RoleDTO managerRole = new RoleDTO(2L,"Manager");  2L. it's id.
     }
+
+    @Override
+    public List<UserDTO> findEmployee() {
+        return findAll().stream().filter(user ->user.getRole().getId()==3).collect(Collectors.toList());
+    }
 }

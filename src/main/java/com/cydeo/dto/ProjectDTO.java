@@ -25,8 +25,24 @@ public class ProjectDTO {
     private LocalDate projectEndDate;
     private String projectDetail;
 
-    private Status projectStatus;  // we need this. Its not in the <form> but it in in the Project List. Thats why we need to provice it by ENUM
+    private Status projectStatus;  // we need this. Its not in the <form> but it in in the Project List. Thats why we need to provide it by ENUM
 
 
+//    <td th:text="${project.unfinishedTaskCounts + '/' + project.completeTaskCounts}"></td>  these are from project-status.html and not in this class.we need to define it.
+    private int unfinishedTaskCounts;
+    private int completeTaskCounts;
 
+    //we need to create one more constructor without those 2 fields;
+
+
+    public ProjectDTO(String projectName, String projectCode, UserDTO assignedManager, LocalDate projectStartDate, LocalDate projectEndDate, String projectDetail, Status projectStatus) {
+        this.projectName = projectName;
+        this.projectCode = projectCode;
+        this.assignedManager = assignedManager;
+        this.projectStartDate = projectStartDate;
+        this.projectEndDate = projectEndDate;
+        this.projectDetail = projectDetail;
+        this.projectStatus = projectStatus;
+    } // this is for Project Create page.
+    // other constructor is for Project Status page because we needed.
 }

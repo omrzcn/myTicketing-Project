@@ -2,12 +2,15 @@ package com.cydeo.controller;
 
 import com.cydeo.dto.ProjectDTO;
 import com.cydeo.dto.RoleDTO;
+import com.cydeo.dto.UserDTO;
 import com.cydeo.enums.Status;
 import com.cydeo.service.ProjectService;
 import com.cydeo.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/project")
@@ -73,6 +76,20 @@ public class ProjectController {
         projectService.save(project);
 
         return "redirect:/project/create";
+    }
+
+
+    // project status page here.
+
+    @GetMapping("/manager/project-status")
+    public String getProjectsByManagers(Model model){
+
+        UserDTO manager = userService.findById("john@cydeo.com"); // we put this hard code here, because we dont have security mechanis here.We'll change this one in security.
+
+        List<ProjectDTO> projects = projectService.getCountedListOfProjectDTO(manager); // we need this method to get projects to find finished and completed projects
+        model.addAttribute("projects",projects);
+
+        return "/manager/project-status";
     }
 
 

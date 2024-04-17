@@ -1,14 +1,33 @@
 package com.cydeo.service.impl;
 
 import com.cydeo.dto.TaskDTO;
+import com.cydeo.dto.UserDTO;
+import com.cydeo.enums.Status;
 import com.cydeo.service.TaskService;
+import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
+@Service
 public class TaskServiceImpl extends AbstractMapService<TaskDTO,Long> implements TaskService {
     @Override
     public TaskDTO save(TaskDTO task) {
-        return super.save(task.getId(),task );
+
+        // bu kisimlar onemli birdaha uzerinden gececez
+        if (task.getTaskStatus() == null)
+            task.setTaskStatus(Status.OPEN);
+
+        if (task.getAssignedDate() == null)
+            task.setAssignedDate(LocalDate.now());
+
+        if (task.getId() == null)
+            task.setId(UUID.randomUUID().getMostSignificantBits());
+
+
+        return super.save(task.getId(), task);
     }
 
     @Override
@@ -27,7 +46,50 @@ public class TaskServiceImpl extends AbstractMapService<TaskDTO,Long> implements
     }
 
     @Override
-    public void update(TaskDTO object) {
-        super.update(object.getId(),object);
+    public void update(TaskDTO task) {
+
+//        if (task.getAssignedDate()==null){
+//            task.setAssignedDate(LocalDate.now());
+//        }
+//
+//        if (task.getTaskStatus() ==null){
+//            task.setTaskStatus(Status.OPEN);
+//        }
+
+
+
+        // below code is for when we clicked update, status was changing to OPEN, but we dont wanna do that. when we click update, status need to be same.
+        TaskDTO foundTask = findById(task.getId());
+        task.setTaskStatus(foundTask.getTaskStatus());
+
+        task.setAssignedDate(foundTask.getAssignedDate());
+
+
+
+        super.update(task.getId(), task);
+    }
+
+    @Override
+    public List<TaskDTO> findTasksByManager(UserDTO manager) {
+        return findAll().stream().
+                filter(taskDTO -> taskDTO.getProject().getAssignedManager().equals(manager)).
+                collect(Collectors.toList());
+
+    }
+
+    @Override
+    public List<TaskDTO> findAllTasksByStatusIsNot(Status status) {
+        return findAll().stream().filter(task -> !task.getTaskStatus().equals(status)).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<TaskDTO> findAllTasksByStatus(Status status) {
+        return findAll().stream().filter(taskDTO -> taskDTO.getTaskStatus().equals(status)).collect(Collectors.toList());
+    }
+
+    @Override
+    public void updateStatus(TaskDTO task) {
+        findById(task.getId()).setTaskStatus(task.getTaskStatus()); // first status is updated
+        update(task); // second, task is updated with the new status information.
     }
 }
