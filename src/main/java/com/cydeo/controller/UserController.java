@@ -3,8 +3,10 @@ package com.cydeo.controller;
 import com.cydeo.dto.UserDTO;
 import com.cydeo.service.RoleService;
 import com.cydeo.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
@@ -33,9 +35,17 @@ private final UserService userService;
 
 
     @PostMapping("/create")
-    public String insertUser(@ModelAttribute("user") UserDTO userDTO){
+    public String insertUser(@Valid @ModelAttribute("user") UserDTO user,BindingResult bindingResult, Model model){
 
-        userService.save(userDTO);
+        if (bindingResult.hasErrors()) {
+
+            model.addAttribute("roles", roleService.findAll());
+            model.addAttribute("users", userService.findAll());
+
+            return "/user/create";
+        }
+
+        userService.save(user);
 
 
         return "redirect:/user/create";
@@ -56,7 +66,14 @@ private final UserService userService;
     }
 
     @PostMapping("/update")
-    public String updateUser(@ModelAttribute("user") UserDTO userDTO ){ // we provided UserDTO userDTO , thats why we dont have to provide @ModelAttribute("user"). Inteellij will understand
+    public String updateUser(@Valid @ModelAttribute("user") UserDTO userDTO, BindingResult bindingResult,Model model){ // we provided UserDTO userDTO , thats why we dont have to provide @ModelAttribute("user"). Inteellij will understand
+
+        if (bindingResult.hasErrors()){
+            model.addAttribute("roles",roleService.findAll());
+            model.addAttribute("users",userService.findAll());
+
+            return "/user/update";
+        }
 
         // we updated this user by @ModelAttribute
         userService.update(userDTO);
